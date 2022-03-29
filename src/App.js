@@ -1,25 +1,57 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {Component} from 'react'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class Todo extends Component{
+
+  state={
+    tarefa:"",
+    lista: []
+  }
+
+  handleChange = (event) => {
+    this.setState({
+      tarefa: event.target.value
+    })
+  }
+
+    add = () => {
+      let {lista, tarefa} = this.state
+      if (tarefa != ""){
+        this.setState({
+            tarefa:'',
+            lista: lista.concat({
+            tarefa: tarefa,
+            id: Date.now()
+          })
+        })
+      }
+    }
+
+  remover = (id) => {
+    let {lista, tarefa} = this.state
+    this.setState({
+      lista: lista.filter((item) => {
+        return item.id != id
+      })
+    })
+  }
+
+  render(){
+    return(
+      <div>
+        <h1>React App To Do List</h1>
+        <input onChange={this.handleChange} type="text" value={this.state.tarefa}/>
+        <button onClick={this.add}>Add</button>
+        <div>
+          {this.state.lista.map((item) => (
+            <ul>
+              <li>{item.tarefa} <button onClick={() => {this.remover(item.id)}}>⌫</button> </li>
+            </ul>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
 }
 
-export default App;
+export default Todo
